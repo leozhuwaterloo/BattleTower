@@ -7,9 +7,9 @@ import net.minecraft.util.math.Vec3d;
 
 public class GeneralUtil {
 	public static void printWarning(String warning) {
-		System.out.print("##################################");
-		System.out.print(warning);
-		System.out.print("##################################");
+		System.out.println("##################################");
+		System.out.println(warning);
+		System.out.println("##################################");
 	}
 	
 	

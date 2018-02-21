@@ -3,32 +3,35 @@ package com.leozhu.battletower.pokemon;
 import java.util.HashMap;
 
 public enum PokeType {
-	NORMAL(0),
-	FIRE(1),
-	WATER(2),
-	ELECTRIC(3),
-	GRASS(4),
-	ICE(5),
-	FIGHTING(6),
-	POISON(7),
-	GROUND(8),
-	FLYING(9),
-	PSYCHIC(10),
-	BUG(11),
-	ROCK(12),
-	GHOST(13),
-	DRAGON(14),
-	DARK(15),
-	STEEL(16),
-	FAIRY(17);
-	
+	NORMAL(0, "Normal"),
+	FIRE(1, "Fire"),
+	WATER(2, "Water"),
+	ELECTRIC(3, "Electric"),
+	GRASS(4, "Grass"),
+	ICE(5, "Ice"),
+	FIGHTING(6, "Fighting"),
+	POISON(7, "Poison"),
+	GROUND(8, "Ground"),
+	FLYING(9, "Flying"),
+	PSYCHIC(10, "Psychic"),
+	BUG(11, "Bug"),
+	ROCK(12, "Rock"),
+	GHOST(13, "Ghost"),
+	DRAGON(14, "Dragon"),
+	DARK(15, "Dark"),
+	STEEL(16, "Steel"),
+	FAIRY(17, "Fairy");
+
 	private int id;
-	private PokeType(int id) {
+	private String name;
+	private PokeType(int id, String name) {
 		this.id = id;
+		this.name = name;
 	}
-	
+
 	public int getId() {return id;}
-	
+	public String getName() {return name;}
+
 	public static double getEffect(PokeType attack, PokeType target) {
 		return effectiveness[attack.getId()][target.getId()];
 	}
@@ -53,4 +56,17 @@ public enum PokeType {
 		new double[]{1, 0.5, 0.5, 0.5, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 0.5, 2},
 		new double[]{1, 0.5, 1, 1, 1, 1, 2, 0.5, 1, 1, 1, 1, 1, 1, 2, 2, 0.5, 1}
 	};
+
+	public static PokeType getType(String pokeType) {
+		return pokeTypeMap.getOrDefault(pokeType, null);
+	}
+
+	private static HashMap<String, PokeType> pokeTypeMap = initMap();
+	private static HashMap<String, PokeType> initMap(){
+		HashMap<String, PokeType> map = new HashMap<>();
+		for(PokeType pokeType : PokeType.values()) {
+			map.put(pokeType.getName(), pokeType);
+		}
+		return map;
+	}
 }
