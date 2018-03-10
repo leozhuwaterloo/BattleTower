@@ -4,6 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 
 public class GeneralUtil {
 	public static void printWarning(String warning) {
@@ -30,10 +32,14 @@ public class GeneralUtil {
 		double diffZ = myPos.z - targetPos.z;
 		
 		float yaw = (float) (Math.atan2(diffZ, diffX) * 180.0D / Math.PI) + 90.0F;
-		float pitch = (float) -(Math.atan2(diffY, distance) * 180.0D / Math.PI);
+		float pitch = (float) (Math.atan2(diffY, distance) * 180.0D / Math.PI);
 		
 		player.rotationYaw = yaw;
 		player.rotationPitch = pitch;
+	}
+	
+	public static void notifyPlayer(EntityPlayerSP player, String str) {
+		player.sendStatusMessage(new TextComponentString(TextFormatting.GREEN + str), false);
 	}
 	
 	public static String unformat(String str) {

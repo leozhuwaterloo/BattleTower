@@ -2,6 +2,7 @@ package com.leozhu.battletower;
 
 import com.leozhu.battletower.event.AutoRespondEvent;
 import com.leozhu.battletower.event.BattleTowerEvent;
+import com.leozhu.battletower.event.LevelUpEvent;
 import com.leozhu.battletower.event.UngrabMouseEvent;
 import com.leozhu.battletower.proxy.CommonProxy;
 import com.leozhu.battletower.util.Reference;
@@ -28,6 +29,7 @@ public class Main {
 		BattleTowerEvent battleTowerEvent = new BattleTowerEvent();
 		MinecraftForge.EVENT_BUS.register(battleTowerEvent);
 		MinecraftForge.EVENT_BUS.register(new UngrabMouseEvent());
+		MinecraftForge.EVENT_BUS.register(new LevelUpEvent());
 		MinecraftForge.EVENT_BUS.register(new AutoRespondEvent(battleTowerEvent));
 	}
 }

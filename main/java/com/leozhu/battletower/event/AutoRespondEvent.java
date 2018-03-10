@@ -32,10 +32,26 @@ public class AutoRespondEvent {
 
 	@SubscribeEvent
 	public void onReceiveChat(ClientChatReceivedEvent event) {
+		if (!enabled) return;
+		
 		String message = event.getMessage().getFormattedText().toLowerCase();
-		if(message.contains("from") && (message.contains("mod") || message.contains("dev") || message.contains("owner"))) {
-			triggerCounter = 20;
-			GeneralUtil.printWarning(message);
+		if(message.contains("from")) {
+			boolean fromMod = true;
+			String modString = "";
+			if(message.contains("mod")) {
+				modString = "mod";
+			} else if(message.contains("dev")) {
+				modString = "dev";
+			} else if(message.contains("owner")) {
+				modString = "owner";
+			} else {
+				fromMod = false;
+			}
+			
+			if(fromMod && message.indexOf("from") < message.indexOf(modString)) {
+				triggerCounter = 20;
+				GeneralUtil.printWarning(message);
+			}
 		}
 	}
 
@@ -72,7 +88,8 @@ public class AutoRespondEvent {
 	{
 		if(autoRespondKey.isPressed()) {
 			enabled = !enabled;
-			System.out.println("Auto Respond: " + (enabled ? "On" : "Off"));
+			triggerCounter = -1;
+			GeneralUtil.notifyPlayer(m.player, "Auto Respond: " + (enabled ? "On" : "Off"));
 		}
 	}
 }

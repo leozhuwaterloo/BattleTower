@@ -3,6 +3,8 @@ package com.leozhu.battletower.pokemon;
 import java.util.HashMap;
 
 public enum Pokedex {
+	ANNI_BLAZIKEN("Anni Blaziken", PokeType.ICE, PokeType.WATER),
+	ANNI_SNORLAX("Anni Snorlax", PokeType.DARK, PokeType.POISON),
 	BULBASAUR("Bulbasaur", PokeType.GRASS, PokeType.POISON),
 	IVYSAUR("Ivysaur", PokeType.GRASS, PokeType.POISON),
 	VENUSAUR("Venusaur", PokeType.GRASS, PokeType.POISON),

@@ -40,8 +40,13 @@ public class LoreUtil {
 			String ppString = nbttaglist.get(2).toString();
 			if(ppString.contains("/")) {
 				try {
-					return Integer.parseInt(ppString.substring(ppString.indexOf("§f") + 2, ppString.indexOf("/")-1));
+					String keyString = "§f";
+					if(!ppString.contains(keyString)) {
+						keyString = "§c";
+					}
+					return Integer.parseInt(ppString.substring(ppString.indexOf(keyString) + 2, ppString.indexOf("/")-1));
 				}catch(NumberFormatException e) {
+					System.out.println(ppString);
 					return null;
 				}
 			}

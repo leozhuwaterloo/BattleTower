@@ -14,6 +14,27 @@ public class PokeUtil {
 		{
 			add("Extreme Speed");
 			add("Bullet Punch");
+			add("Sucker Punch");
+		}
+	};
+	
+	public static ArrayList<Pokedex> noSuckerPunch = new ArrayList<Pokedex>() {
+		{
+			add(Pokedex.URSARING);
+			add(Pokedex.EXEGGUTOR);
+			add(Pokedex.CHANSEY);
+			add(Pokedex.UMBREON);
+			add(Pokedex.MILTANK);
+			add(Pokedex.ARCANINE);
+			add(Pokedex.SCIZOR);
+			add(Pokedex.PORYGON2);
+			add(Pokedex.VAPOREON);
+			add(Pokedex.UMBREON);
+			add(Pokedex.AGGRON);
+			add(Pokedex.KABUTOPS);
+			add(Pokedex.MANTINE);
+			add(Pokedex.JYNX);
+			add(Pokedex.RELICANTH);
 		}
 	};
 
@@ -76,14 +97,65 @@ public class PokeUtil {
 			put(Pokedex.VOLCANION, PokeType.WATER);
 		}
 	};
-
+	
+	private static HashMap<Pokedex, ArrayList<Pokedex>> dangerPokemon = new HashMap<Pokedex, ArrayList<Pokedex>>() {
+		{
+			ArrayList<Pokedex> scizorList = new ArrayList<>();
+			ArrayList<Pokedex> garyList = new ArrayList<>();
+			ArrayList<Pokedex> dniteList = new ArrayList<>();
+			ArrayList<Pokedex> anniBlazikenList = new ArrayList<>();
+			ArrayList<Pokedex> anniSnorlaxList = new ArrayList<>();
+			ArrayList<Pokedex> absolList = new ArrayList<>();
+			
+			scizorList.add(Pokedex.ARCANINE);
+			scizorList.add(Pokedex.POLITOED);
+			scizorList.add(Pokedex.AERODACTYL);
+			scizorList.add(Pokedex.SWELLOW);
+			scizorList.add(Pokedex.RAPIDASH);
+			scizorList.add(Pokedex.MACHAMP);
+			scizorList.add(Pokedex.WEEZING);
+			scizorList.add(Pokedex.HARIYAMA);
+			scizorList.add(Pokedex.MUK);
+			scizorList.add(Pokedex.DODRIO);
+			
+			garyList.add(Pokedex.ARCANINE);
+			garyList.add(Pokedex.AERODACTYL);
+			garyList.add(Pokedex.RAPIDASH);
+			
+			dniteList.add(Pokedex.ARCANINE);
+			dniteList.add(Pokedex.AERODACTYL);
+			
+			anniBlazikenList.add(Pokedex.HARIYAMA);
+			anniBlazikenList.add(Pokedex.AMPHAROS);
+			anniBlazikenList.add(Pokedex.RHYDON);
+			anniBlazikenList.add(Pokedex.STEELIX);
+			anniBlazikenList.add(Pokedex.CHARIZARD);
+			
+			anniSnorlaxList.add(Pokedex.RHYDON);
+			anniSnorlaxList.add(Pokedex.STEELIX);
+			anniSnorlaxList.add(Pokedex.DONPHAN);
+			
+			absolList.add(Pokedex.SCIZOR);
+			absolList.add(Pokedex.ABSOL);
+			
+			put(Pokedex.SCIZOR, scizorList);
+			put(Pokedex.GYARADOS, garyList);
+			put(Pokedex.DRAGONITE, dniteList);
+			put(Pokedex.ANNI_BLAZIKEN, anniBlazikenList);
+			put(Pokedex.ANNI_SNORLAX, anniSnorlaxList);
+			put(Pokedex.ABSOL, absolList);
+		}
+	};
 
 	public static int chooseMove(Pokedex myPokemon, Pokedex targetPokemon, Container openContainer, HashMap<String, Integer> battleAttrib) {
 		System.out.println(myPokemon);
 		System.out.println(targetPokemon);
-		if(myPokemon == null || targetPokemon == null || openContainer == null || battleAttrib == null) return 0;
+		System.out.println(noSuckerPunch);
+		if(myPokemon == null || targetPokemon == null || openContainer == null || battleAttrib == null) return LoreUtil.moveSlots[(int)(Math.random() * LoreUtil.moveSlots.length)];
 		int bestMoveSlot = 0;
-		double highestPower = 0D;
+		double highestPower = -1D;
+		boolean usingPriorityMove = false;
+		int priorityMoveSlot = 0;
 		for(int moveSlot : LoreUtil.moveSlots) {
 			ItemStack is = openContainer.getSlot(moveSlot).getStack();
 			Integer ppLeft = LoreUtil.getPP(is);
@@ -95,23 +167,30 @@ public class PokeUtil {
 				if(power != null) {
 					Double finalPower = (double) power;
 					PokeType moveType = LoreUtil.getMoveType(is);
+					if(moveType == PokeType.NORMAL && GeneralUtil.unformat(is.getDisplayName()).contains("Hidden Power")) {
+						moveType = PokeType.FIGHTING;
+					}
 					if (moveType == myPokemon.getType1() || moveType == myPokemon.getType2()) {
 						finalPower *= 1.2D;
 					}
 					finalPower *= PokeType.getEffect(moveType, targetPokemon.getType1());
 					if(targetPokemon.getType2() != null) finalPower *= PokeType.getEffect(moveType, targetPokemon.getType2());
-
+					
 					if(immunePokemon.containsKey(targetPokemon) && immunePokemon.get(targetPokemon) == moveType) finalPower = 0D;
-					if(priorityMove.contains(moveName)) {
-						if(health < 0.2) {
-							finalPower *= 5D;
-						} else if(health < 0.6) {
-							finalPower *= 2.3D;
+					if(priorityMove.contains(moveName) && targetPokemon != Pokedex.RELICANTH) {
+						if(noSuckerPunch.contains(targetPokemon) && health > 0.5) {
+							finalPower *= 0D;
 						} else {
-							finalPower *= 1.8D;
+							priorityMoveSlot = moveSlot;
+							if(health < 0.2) {
+								finalPower *= 5D;
+							} else if(health < 0.6) {
+								finalPower *= 2.3D;
+							} else {
+								finalPower *= 1.8D;
+							}
 						}
 					}
-
 					if(finalPower > highestPower) {
 						bestMoveSlot = moveSlot;
 						highestPower = finalPower;
@@ -119,22 +198,31 @@ public class PokeUtil {
 				} else {
 					if(moveName.contains("Dance")) {
 						int dancedTime = battleAttrib.getOrDefault(myPokemon.getName() + "Danced", 0);
+						boolean useDance = false;
 						if(dancedTime == 0) {
-							bestMoveSlot = moveSlot;
-							highestPower = 300D;
-						} else if (dancedTime > 0 && dancedTime < 6) {
-							if(health > 0.8D) {
+							useDance = true;
+						} else if (dancedTime > 0 && dancedTime < 6 && health > 0.8D) {
+							useDance = true;
+						}
+						if(useDance) {
+							if(dangerPokemon.containsKey(myPokemon) &&
+									dangerPokemon.get(myPokemon).contains(targetPokemon)) {
+								usingPriorityMove = true;
+							} else if (targetPokemon != null && targetPokemon != Pokedex.SKARMORY){
 								bestMoveSlot = moveSlot;
-								highestPower = 200D;
+								highestPower = 400D;
 							}
 						}
 					}
 				}
 			}
 		}
-
-		//System.out.println(bestMoveSlot);
-		//bestMoveSlot = 0;
+		
+		if(usingPriorityMove && priorityMoveSlot != 0 && targetPokemon != Pokedex.RELICANTH) {
+			bestMoveSlot = priorityMoveSlot;
+		}
+		// System.out.println(bestMoveSlot);
+		// bestMoveSlot = 0;
 		return bestMoveSlot;
 	}
 }
