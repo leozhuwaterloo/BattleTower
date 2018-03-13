@@ -257,7 +257,7 @@ public class BattleTowerEvent {
 					}
 				}
 				 */
-				if(entity.getName().contains("BoBo07")) {
+				if(entity.getName().contains("Dewgong §1") || entity.getName().contains("Seel §1")) {
 					target = entity;
 					targetPos = entity.getPositionVector();
 				}

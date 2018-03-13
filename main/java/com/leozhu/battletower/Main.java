@@ -24,7 +24,7 @@ public class Main {
 	public static CommonProxy proxy;
 
 
-	@EventHandler
+	@EventHandler	
 	public void preInit(FMLPreInitializationEvent event)  {
 		BattleTowerEvent battleTowerEvent = new BattleTowerEvent();
 		MinecraftForge.EVENT_BUS.register(battleTowerEvent);

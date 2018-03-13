@@ -90,7 +90,7 @@ public class LevelUpEvent {
 			message = GeneralUtil.unformat(message).trim();
 			if(message.contains(" sent out ")) {
 				targetPokemon = Pokedex.getPokemon(message.substring(message.indexOf(" sent out ") + 10, message.length()));
-				if(targetPokemon == Pokedex.CRADILY) {
+				if(targetPokemon == Pokedex.CRADILY || targetPokemon == Pokedex.RELICANTH) {
 					setState(State.GIVE_UP);
 				}
 			} else if(message.contains("Go! ") && message.charAt(message.length()-1) == '!') {
